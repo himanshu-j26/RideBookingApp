@@ -22,7 +22,11 @@ public class InProgressState implements TripState{
 
     @Override
     public void end(Trip trip) {
-        trip.setTripStatus(TripStatus.COMPLETED);
         trip.setTripState(new CompletedState());
+    }
+
+    @Override
+    public TripStatus getStatus() {
+        return TripStatus.IN_PROGRESS;
     }
 }

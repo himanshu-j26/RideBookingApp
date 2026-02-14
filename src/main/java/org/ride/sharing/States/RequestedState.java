@@ -13,7 +13,6 @@ public class RequestedState implements TripState {
     @Override
     public void assign(Trip trip, Driver driver) {
         trip.setTripState(new AssignedState());
-        trip.setTripStatus(TripStatus.ASSIGNED);
         trip.setDriver(driver);
     }
 
@@ -25,5 +24,10 @@ public class RequestedState implements TripState {
     @Override
     public void end(Trip trip) {
         System.out.println("Can't end trip because it is not started yet");
+    }
+
+    @Override
+    public TripStatus getStatus() {
+        return TripStatus.REQUESTED;
     }
 }

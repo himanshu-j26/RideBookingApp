@@ -10,84 +10,60 @@ import org.ride.sharing.Strategy.MatchingStrategy.DriverMatchingStrategy;
 import org.ride.sharing.Strategy.PricingStrategy.PricingStrategy;
 
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class RideSharingService {
-    public static RideSharingService INSTANCE;
+    private final UserService userService;
+    private final TripService tripService;
+    private final DriverMatchingStrategy driverMatchingStrategy;
+    private final PricingStrategy pricingStrategy;
 
-    private final Map<String, Rider> allRiders = new ConcurrentHashMap<>();
-    private final Map<String, Driver> allDrivers = new ConcurrentHashMap<>();
-    private final Map<String, Trip> allTrips = new ConcurrentHashMap<>();
-
-    private DriverMatchingStrategy driverMatchingStrategy;
-    private PricingStrategy pricingStrategy;
-
-    public RideSharingService() {}
-
-    public static synchronized RideSharingService getInstance() {
-        if(INSTANCE == null) {
-            synchronized (RideSharingService.class) {
-                if(INSTANCE == null) {
-                INSTANCE = new RideSharingService();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public void setDriverMatchingStrategy(DriverMatchingStrategy driverMatchingStrategy) {
-        this.driverMatchingStrategy = driverMatchingStrategy;
-    }
-
-    public void setPricingStrategy(PricingStrategy pricingStrategy) {
+    public RideSharingService(UserService userService,
+                              TripService tripService,
+                              DriverMatchingStrategy matchingStrategy,
+                              PricingStrategy pricingStrategy) {
+        this.userService = userService;
+        this.tripService = tripService;
+        this.driverMatchingStrategy = matchingStrategy;
         this.pricingStrategy = pricingStrategy;
     }
 
     public Driver registerDriver(
             String name, String contact, Vehicle vehicle, Location initialLocation) {
-        Driver driver = new Driver(name, contact, vehicle, initialLocation);
-        allDrivers.put(driver.getId(), driver);
-        return driver;
+        return userService.registerDriver(name, contact, vehicle, initialLocation);
     }
 
     public Rider registerRider(String name, String contact) {
-        Rider rider = new Rider(name, contact);
-        allRiders.put(rider.getId(), rider);
-        return rider;
+        return userService.registerRider(name, contact);
     }
 
     public Trip requestTrip(String riderId, Location pickup, Location drop, RideType rideType) {
-        Rider rider = allRiders.get(riderId);
+        Rider rider = userService.getRiderFromRiderId(riderId);
         if(rider == null) {
             System.err.println("User does not exist");
             throw new RiderNotFoundException("Rider does not exist");
         }
 
         System.out.println("New ride request by rider: "+ rider.getName());
+        System.out.println("Waiting for drivers to accept this trip");
+        Driver driver = driverMatchingStrategy.findDrivers(List.copyOf(userService.getAllDrivers()), pickup, rideType);
 
-        List<Driver> drivers = driverMatchingStrategy.findDrivers(List.copyOf(allDrivers.values()), pickup, rideType);
-
-        if(allDrivers.isEmpty()) {
+        if(driver == null) {
             System.err.println("Not able to find available drivers nearby");
             return null;
         }
 
-        System.out.println("Found " + allDrivers.size() + " available drivers");
+        System.out.println("Found driver for the ride: "+ driver.getName());
         double fee = pricingStrategy.calculatePrice(pickup, drop, rideType);
         System.out.println("Estimated fare: " + fee);
 
-        Trip trip = new Trip(pickup, drop, fee, rider);
-        allTrips.put(trip.getId(), trip);
-        System.out.println("Waiting for drivers to accept this trip");
+        Trip trip = tripService.createTrip(pickup, drop, fee, rider);
 
-        trip.setDriver(drivers.getFirst());
+        trip.assignDriver(driver);
         return trip;
     }
 
     public void acceptTrip(String tripId) {
-        Trip trip = allTrips.get(tripId);
+        Trip trip = tripService.getTrip(tripId);
         if(trip == null) {
             throw new NoTripFoundException("No trip found while accepting");
         }
@@ -103,7 +79,7 @@ public class RideSharingService {
     }
 
     public void startTrip(String tripId) {
-        Trip trip = allTrips.get(tripId);
+        Trip trip = tripService.getTrip(tripId);
 
         if(trip == null) {
             throw new NoTripFoundException("Trip not found");
@@ -114,7 +90,7 @@ public class RideSharingService {
     }
 
     public void endTrip(String tripId) {
-        Trip trip = allTrips.get(tripId);
+        Trip trip = tripService.getTrip(tripId);
 
         if(trip == null) {
             throw new NoTripFoundException("Trip not found");

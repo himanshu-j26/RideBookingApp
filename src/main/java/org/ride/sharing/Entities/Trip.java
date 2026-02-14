@@ -1,20 +1,17 @@
 package org.ride.sharing.Entities;
 
-import org.ride.sharing.Enums.TripStatus;
 import org.ride.sharing.States.RequestedState;
 import org.ride.sharing.States.TripState;
 
 import java.util.UUID;
 
 public class Trip {
-    private String id;
+    private final String id;
     private Driver Driver;
-    private Location pickupLocation;
-    private Location dropLocation;
-    private double fare;
-    private Rider rider;
-
-    private TripStatus tripStatus;
+    private final Location pickupLocation;
+    private final Location dropLocation;
+    private final double fare;
+    private final Rider rider;
 
     private TripState tripState;
 
@@ -24,7 +21,6 @@ public class Trip {
         this.dropLocation = dropLocation;
         this.fare = fair ;
         this.rider = rider;
-        this.tripStatus = TripStatus.REQUESTED;
         this.tripState = new RequestedState();
     }
 
@@ -60,10 +56,6 @@ public class Trip {
         return fare;
     }
 
-    public TripStatus getTripStatus() {
-        return tripStatus;
-    }
-
     public TripState getTripState() {
         return tripState;
     }
@@ -74,10 +66,6 @@ public class Trip {
 
     public void setDriver(Driver driver) {
         Driver = driver;
-    }
-
-    public void setTripStatus(TripStatus tripStatus) {
-        this.tripStatus = tripStatus;
     }
 
     public void setTripState(TripState tripState) {

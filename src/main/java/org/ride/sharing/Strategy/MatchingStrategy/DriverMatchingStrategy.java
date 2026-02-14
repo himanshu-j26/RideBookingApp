@@ -7,5 +7,5 @@ import org.ride.sharing.Enums.RideType;
 import java.util.List;
 
 public interface DriverMatchingStrategy {
-    List<Driver> findDrivers(List<Driver> allDrivers, Location pickup, RideType rideType);
+    Driver findDrivers(List<Driver> allDrivers, Location pickup, RideType rideType);
 }

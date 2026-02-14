@@ -10,9 +10,11 @@ import org.ride.sharing.Strategy.PricingStrategy.VehicleBasedPricingStrategy;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-       RideSharingService sharingService = RideSharingService.getInstance();
-       sharingService.setPricingStrategy(new VehicleBasedPricingStrategy());
-       sharingService.setDriverMatchingStrategy(new NearestDriverStrategy());
+       RideSharingService sharingService = new RideSharingService(
+               new UserService(),
+               new TripService(),
+               new NearestDriverStrategy(),
+               new VehicleBasedPricingStrategy());
 
         Rider rider1 = sharingService.registerRider("Rider1", "123456");
 

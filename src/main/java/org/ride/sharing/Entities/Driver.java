@@ -3,7 +3,7 @@ package org.ride.sharing.Entities;
 import org.ride.sharing.Enums.DriverStatus;
 
 public class Driver extends User{
-    private Vehicle vehicle;
+    private final Vehicle vehicle;
     private Location currentLocation;
     private DriverStatus driverStatus;
 
@@ -32,5 +32,13 @@ public class Driver extends User{
 
     public void setDriverStatus(DriverStatus driverStatus) {
         this.driverStatus = driverStatus;
+    }
+
+    public synchronized boolean tryReserve() {
+        if (driverStatus == DriverStatus.ONLINE) {
+            driverStatus = DriverStatus.IN_TRIP;
+            return true;
+        }
+        return false;
     }
 }

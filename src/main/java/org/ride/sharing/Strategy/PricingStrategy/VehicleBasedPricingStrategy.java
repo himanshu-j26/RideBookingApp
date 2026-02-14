@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class VehicleBasedPricingStrategy implements PricingStrategy{
     private static final double BASE_PAY = 100;
+    private static final double DEFAULT_RATE_PER_KM = 100;
     private static final Map<RideType, Double> RATE_PER_KM = Map.of(
             RideType.SUV, 20.0,
             RideType.SEDAN, 30.0,
@@ -14,6 +15,6 @@ public class VehicleBasedPricingStrategy implements PricingStrategy{
     );
     @Override
     public double calculatePrice(Location pickup, Location drop, RideType rideType) {
-        return BASE_PAY + RATE_PER_KM.get(rideType) * pickup.getDistance(drop);
+        return BASE_PAY + RATE_PER_KM.getOrDefault(rideType, DEFAULT_RATE_PER_KM) * pickup.getDistance(drop);
     }
 }

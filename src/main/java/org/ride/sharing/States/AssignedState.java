@@ -18,11 +18,15 @@ public class AssignedState implements TripState{
     @Override
     public void start(Trip trip) {
         trip.setTripState(new InProgressState());
-        trip.setTripStatus(TripStatus.IN_PROGRESS);
     }
 
     @Override
     public void end(Trip trip) {
 
+    }
+
+    @Override
+    public TripStatus getStatus() {
+        return TripStatus.ASSIGNED;
     }
 }

@@ -2,6 +2,7 @@ package org.ride.sharing.States;
 
 import org.ride.sharing.Entities.Driver;
 import org.ride.sharing.Entities.Trip;
+import org.ride.sharing.Enums.TripStatus;
 
 public class CompletedState implements TripState{
     @Override
@@ -22,5 +23,10 @@ public class CompletedState implements TripState{
     @Override
     public void end(Trip trip) {
         System.out.println("Trip already ended");
+    }
+
+    @Override
+    public TripStatus getStatus() {
+        return TripStatus.COMPLETED;
     }
 }
