@@ -1,10 +1,10 @@
-# 🚗 Ride Booking App
+# Ride Booking App
 
 A scalable ride booking backend system implementing matching and pricing strategies with clean architecture principles.
 
 ---
 
-## 📌 Overview
+## Overview
 
 RideBookingApp is a backend system that simulates a ride-sharing platform.  
 It focuses on:
@@ -18,7 +18,7 @@ This project demonstrates solid Low-Level Design (LLD) and clean code practices.
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 The system follows a modular design:
 
@@ -36,7 +36,7 @@ The system follows a modular design:
 
 ---
 
-## 🧠 Design Patterns Used
+## Design Patterns Used
 
 - Singleton Pattern (RideSharingService)
 - Strategy Pattern (Matching & Pricing)
@@ -45,7 +45,7 @@ The system follows a modular design:
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - Java
 - OOP Principles
