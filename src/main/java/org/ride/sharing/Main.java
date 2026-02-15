@@ -49,7 +49,7 @@ public class Main {
         Trip trip1 = sharingService.requestTrip(rider1.getId(), pickup, drop, RideType.SEDAN);
 
         if(trip1 != null) {
-            sharingService.acceptTrip(trip1.getId());
+//            sharingService.acceptTrip(trip1.getId());
             sharingService.startTrip(trip1.getId());
             sharingService.endTrip(trip1.getId());
         }
@@ -65,7 +65,7 @@ public class Main {
                 RideType.AUTO);
 
         if(trip2 != null) {
-            sharingService.acceptTrip(trip2.getId());
+//            sharingService.acceptTrip(trip2.getId());
             sharingService.startTrip(trip2.getId());
             sharingService.endTrip(trip2.getId());
         }
@@ -78,7 +78,7 @@ public class Main {
         );
 
         if(trip3 != null) {
-            sharingService.acceptTrip(trip3.getId());
+//            sharingService.acceptTrip(trip3.getId());
             sharingService.startTrip(trip3.getId());
             sharingService.endTrip(trip3.getId());
         }

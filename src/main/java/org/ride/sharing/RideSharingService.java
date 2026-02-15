@@ -62,6 +62,7 @@ public class RideSharingService {
         return trip;
     }
 
+    // This class is redundant as drivers are accepting inside DriverMatchingStrategy while requesting
     public void acceptTrip(String tripId) {
         Trip trip = tripService.getTrip(tripId);
         if(trip == null) {
