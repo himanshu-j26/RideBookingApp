@@ -24,7 +24,7 @@ public class Trip {
         this.tripState = new RequestedState();
     }
 
-    public void assignDriver(Driver driver) {
+    public synchronized void assignDriver(Driver driver) {
         this.tripState.assign(this, driver);
     }
 
